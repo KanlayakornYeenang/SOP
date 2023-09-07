@@ -4,6 +4,7 @@ import com.example.lab06.pojo.Wizard;
 import com.example.lab06.pojo.Wizards;
 import com.example.lab06.repository.WizardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +21,21 @@ public class WizardController {
         return ResponseEntity.ok(wizard);
     }
 
-    @RequestMapping(value ="/addWizard", method = RequestMethod.POST)
-    public ResponseEntity<?> addWizard(@RequestParam("sex") String sex, @RequestParam("name") String name, @RequestParam("school") String school, @RequestParam("house") String house, @RequestParam("money") String money, @RequestParam("position") String position) {
-        Wizard wizard = new Wizard(sex, name, school, house, money, position);
+    @RequestMapping(value = "/addWizard", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> addWizard(@RequestBody Wizard wizard)  {
         String response = wizardService.saveWizard(wizard);
+        return ResponseEntity.ok(response);
+    }
+
+    @RequestMapping(value ="/updateWizard/{_id}", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> updateWizard(@PathVariable("_id") String _id, @RequestBody Wizard wizard) {
+        String response = wizardService.updateWizard(_id, wizard);
+        return ResponseEntity.ok(response);
+    }
+
+    @RequestMapping(value ="/deleteWizard/{_id}", method = RequestMethod.POST)
+    public ResponseEntity<?> deleteWizard(@PathVariable("_id") String _id) {
+        String response = wizardService.deleteWizard(_id);
         return ResponseEntity.ok(response);
     }
 }
